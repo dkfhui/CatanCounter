@@ -18,58 +18,44 @@ class MainActivity : AppCompatActivity() {
         init()
         numberSetText.text = numberSet.toString()
 
-        rollInput.addTextChangedListener(object: TextWatcher {
-            override fun afterTextChanged(p0: Editable?) {
-            }
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                val roll:Int? = rollInput.text.toString().toIntOrNull()
-                if(roll == null){
-                   disableBothButtons()
-                }
-                else
-                    when(roll) {
-                        in 2..12 -> {
-                            removeButton.isEnabled = numberSet[roll] != 0
-                            addButton.isEnabled = true
-                        }
-                        else -> {
-                            disableBothButtons()
-                            validNumberToast()
-                        }
-                    }
-            }
-        })
+        rollPicker.setOnValueChangedListener { picker, oldVal, newVal -> run{
+            removeButton.isEnabled = numberSet[newVal] != 0
+        } }
 
         addButton.setOnClickListener{
-            updateRolls(rollInput.text.toString().toInt())
-            removeButton.isEnabled = true;
+//            updateRolls(rollInput.text.toString().toInt())
+            updateRolls(rollPicker.value)
+            removeButton.isEnabled = true
         }
 
         removeButton.setOnClickListener{
-            val roll = rollInput.text.toString().toInt()
+//            val roll = rollInput.text.toString().toInt()
+            val roll = rollPicker.value
             updateRolls(roll, -1)
             if(numberSet[roll] == 0)
                 removeButton.isEnabled = false
         }
+
+        val graphFragment = GraphFragment.newInstance()
+        supportFragmentManager.beginTransaction().add(R.id.graphFragment, graphFragment).commit()
     }
 
-    fun init(){
+    private fun init(){
         for(i in 2..12) {
             numberSet[i] = 0
         }
+        rollPicker.minValue = 2
+        rollPicker.maxValue = 12
+        removeButton.isEnabled = false
     }
 
-    fun validNumberToast() {Toast.makeText(this, "Please input a valid number from 2 to 12", Toast.LENGTH_LONG).show()}
-    fun disableBothButtons() {
+    private fun validNumberToast() {Toast.makeText(this, "Please input a valid number from 2 to 12", Toast.LENGTH_LONG).show()}
+    private fun disableBothButtons() {
         removeButton.isEnabled = false
         addButton.isEnabled = false
     }
 
-    fun updateRolls(roll: Int, change: Int = 1) {
+    private fun updateRolls(roll: Int, change: Int = 1) {
         when(roll) {
             in 2..12 -> numberSet[roll] = numberSet[roll]!!+change
             else -> println("Wrong input in updateRolls()")
