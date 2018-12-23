@@ -1,11 +1,16 @@
 package dkfhui.catancounter
 
+import android.content.Intent
+import android.opengl.Visibility
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.app.FragmentTransaction
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.graph_layout.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,8 +41,10 @@ class MainActivity : AppCompatActivity() {
                 removeButton.isEnabled = false
         }
 
-        val graphFragment = GraphFragment.newInstance()
-        supportFragmentManager.beginTransaction().add(R.id.graphFragment, graphFragment).commit()
+        graphButton.setOnClickListener {
+            val graphIntent = Intent(this, GraphActivity::class.java)
+            startActivity(graphIntent)
+        }
     }
 
     private fun init(){

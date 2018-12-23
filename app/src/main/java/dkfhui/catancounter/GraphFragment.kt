@@ -1,5 +1,7 @@
 package dkfhui.catancounter
 
+import android.app.Activity
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -15,6 +17,11 @@ import kotlinx.android.synthetic.main.graph_layout.*
 
 
 class GraphFragment : Fragment {
+    lateinit var onGraphTouchedListener: OnGraphTouchedListener
+
+    interface OnGraphTouchedListener {
+        fun onGraphTouched()
+    }
 
     constructor()
 
@@ -27,16 +34,30 @@ class GraphFragment : Fragment {
         }
     }
 
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        if(context is OnGraphTouchedListener)
+            onGraphTouchedListener = context
+        else
+            throw RuntimeException(context!!.toString() + " must implement OnGraphTouchedListener")
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
         ) : View {
-        return inflater.inflate(R.layout.graph_layout, container, false)
+        val view = inflater.inflate(R.layout.graph_layout, container, false)
+        view.setOnClickListener { onGraphTouchedListener.onGraphTouched() }
+        return view
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onStart() {
+        super.onStart()
+        createGraph()
+    }
+
+    fun createGraph() {
         val series = BarGraphSeries<DataPoint>(
             arrayOf<DataPoint>(
                 DataPoint(0.0, 1.0),
@@ -62,7 +83,7 @@ class GraphFragment : Fragment {
 // draw values on top
         series.isDrawValuesOnTop = true
         series.valuesOnTopColor = Color.RED
+        series.setOnDataPointTapListener { series, dataPoint -> onGraphTouchedListener.onGraphTouched() }
 //series.setValuesOnTopSize(50);
     }
-
 }
