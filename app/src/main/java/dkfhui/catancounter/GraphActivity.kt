@@ -1,8 +1,11 @@
 package dkfhui.catancounter
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import com.jjoe64.graphview.series.BarGraphSeries
 import com.jjoe64.graphview.series.DataPoint
@@ -24,8 +27,27 @@ class GraphActivity : AppCompatActivity(), GraphFragment.OnGraphTouchedListener 
 //            .commit()
     }
 
+    override fun onBackPressed() {
+        onGraphTouched()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId) {
+            android.R.id.home -> {
+                onGraphTouched()
+            }
+            else -> {
+                return super.onOptionsItemSelected(item)
+            }
+        }
+        return true
+
+    }
+
     override fun onGraphTouched() {
         println("onGraphTouched ")
+        val finishIntent = Intent()
+        setResult(Activity.RESULT_OK, finishIntent)
         finish()
     }
 
@@ -69,6 +91,7 @@ class GraphActivity : AppCompatActivity(), GraphFragment.OnGraphTouchedListener 
 // draw values on top
         series.isDrawValuesOnTop = true
         series.valuesOnTopColor = Color.RED
+        graph.setOnClickListener { onGraphTouched() }
 //series.setValuesOnTopSize(50);
     }
 }

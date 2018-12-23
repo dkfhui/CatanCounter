@@ -1,5 +1,6 @@
 package dkfhui.catancounter
 
+import android.app.Activity
 import android.content.Intent
 import android.opengl.Visibility
 import android.support.v7.app.AppCompatActivity
@@ -44,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         graphButton.setOnClickListener {
             val graphIntent = Intent(this, GraphActivity::class.java)
             graphIntent.putExtra("numberSet", numberSet)
-            startActivity(graphIntent)
+            startActivityForResult(graphIntent, 1)
         }
     }
 
@@ -69,5 +70,17 @@ class MainActivity : AppCompatActivity() {
             else -> println("Wrong input in updateRolls()")
         }
         numberSetText.text = numberSet.toString()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when(requestCode) {
+            1 -> {
+                if(resultCode == Activity.RESULT_OK)
+                    println("It's all good")
+                else
+                    println("" + resultCode + " " + Activity.RESULT_CANCELED)
+            }
+        }
     }
 }
