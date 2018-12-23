@@ -2,6 +2,7 @@ package dkfhui.catancounter
 
 import android.app.Activity
 import android.content.Intent
+import android.icu.util.Calendar
 import android.opengl.Visibility
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -10,12 +11,19 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.graph_layout.*
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
     private val numberSet = hashMapOf<Int, Int>()
+    private val db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +55,8 @@ class MainActivity : AppCompatActivity() {
             graphIntent.putExtra("numberSet", numberSet)
             startActivityForResult(graphIntent, 1)
         }
+
+        endGameButton.setOnClickListener { uploadGameData() }
     }
 
     private fun init(){
@@ -71,6 +81,17 @@ class MainActivity : AppCompatActivity() {
         }
         numberSetText.text = numberSet.toString()
     }
+
+    fun uploadGameData() {
+        val current = Timestamp.now()
+        val date = current.toDate()
+        db.collection("Games")
+    }
+
+//    fun getDateFromTimestamp(stamp:Timestamp): Date {
+//        val formatter = DateTimeFormatter.ofPattern("yyyy/mm/dd hh:mm")
+//        return formatter.
+//    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

@@ -46,8 +46,8 @@ class GraphActivity : AppCompatActivity(), GraphFragment.OnGraphTouchedListener 
 
     override fun onGraphTouched() {
         println("onGraphTouched ")
-        val finishIntent = Intent()
-        setResult(Activity.RESULT_OK, finishIntent)
+//        val finishIntent = Intent()
+        setResult(Activity.RESULT_OK, null)
         finish()
     }
 
