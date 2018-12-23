@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.graph_layout.*
 
 class MainActivity : AppCompatActivity() {
 
-    val numberSet = hashMapOf<Int, Int>()
+    private val numberSet = hashMapOf<Int, Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
 
         graphButton.setOnClickListener {
             val graphIntent = Intent(this, GraphActivity::class.java)
+            graphIntent.putExtra("numberSet", numberSet)
             startActivity(graphIntent)
         }
     }

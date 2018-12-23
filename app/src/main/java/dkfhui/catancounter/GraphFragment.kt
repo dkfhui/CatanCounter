@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.graph_layout.*
 
 
 class GraphFragment : Fragment {
-    lateinit var onGraphTouchedListener: OnGraphTouchedListener
+    private lateinit var onGraphTouchedListener: OnGraphTouchedListener
 
     interface OnGraphTouchedListener {
         fun onGraphTouched()
@@ -26,9 +26,10 @@ class GraphFragment : Fragment {
     constructor()
 
     companion object {
-        internal fun newInstance() : GraphFragment{
+        internal fun newInstance(numberSet:HashMap<Int, Int>) : GraphFragment{
             val graphFragment = GraphFragment()
             val b = Bundle()
+            b.putSerializable("numberSet", numberSet)
             graphFragment.arguments = b
             return graphFragment
         }
@@ -48,23 +49,28 @@ class GraphFragment : Fragment {
         savedInstanceState: Bundle?
         ) : View {
         val view = inflater.inflate(R.layout.graph_layout, container, false)
-        view.setOnClickListener { onGraphTouchedListener.onGraphTouched() }
         return view
     }
 
-    override fun onStart() {
-        super.onStart()
-        createGraph()
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        if(arguments != null)
+            createGraph(arguments!!.getSerializable("numberSet") as HashMap<Int, Int>)
     }
 
-    fun createGraph() {
+    fun createGraph(numberSet:HashMap<Int, Int>) {
         val series = BarGraphSeries<DataPoint>(
             arrayOf<DataPoint>(
-                DataPoint(0.0, 1.0),
-                DataPoint(1.0, 5.0),
-                DataPoint(2.0, 3.0),
-                DataPoint(3.0, 2.0),
-                DataPoint(4.0, 6.0)
+                DataPoint(0.2, numberSet[2]!!.toDouble()),
+                DataPoint(1.0, numberSet[3]!!.toDouble()),
+                DataPoint(1.8, numberSet[4]!!.toDouble()),
+                DataPoint(2.6, numberSet[5]!!.toDouble()),
+                DataPoint(3.4, numberSet[7]!!.toDouble()),
+                DataPoint(4.2, numberSet[8]!!.toDouble()),
+                DataPoint(5.0, numberSet[9]!!.toDouble()),
+                DataPoint(5.8, numberSet[10]!!.toDouble()),
+                DataPoint(6.6, numberSet[11]!!.toDouble()),
+                DataPoint(7.4, numberSet[12]!!.toDouble())
             )
         )
         graph.addSeries(series)
@@ -78,7 +84,9 @@ class GraphFragment : Fragment {
             )
         }
 
-        series.spacing = 50
+        series.spacing = 15
+        series.dataWidth = 0.5
+        graph.gridLabelRenderer.padding = 32
 
 // draw values on top
         series.isDrawValuesOnTop = true
