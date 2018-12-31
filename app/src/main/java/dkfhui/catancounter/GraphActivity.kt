@@ -12,13 +12,13 @@ import com.jjoe64.graphview.series.DataPoint
 import kotlinx.android.synthetic.main.graph_layout.*
 
 class GraphActivity : AppCompatActivity(), GraphFragment.OnGraphTouchedListener {
-    private val numberSet = hashMapOf<Int, Int>()
+    private val numberSet = hashMapOf<String, Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_graph)
 
-        createGraph(intent.getSerializableExtra("numberSet") as HashMap<Int, Int>)
+        createGraph(intent.getSerializableExtra("numberSet") as HashMap<String, Int>)
 
 //        val graphFragment = GraphFragment.newInstance(intent.getSerializableExtra("numberSet") as HashMap<Int, Int>)
 //        supportFragmentManager.beginTransaction()
@@ -51,20 +51,20 @@ class GraphActivity : AppCompatActivity(), GraphFragment.OnGraphTouchedListener 
         finish()
     }
 
-    fun createGraph(numberSet:HashMap<Int, Int>) {
+    fun createGraph(numberSet:HashMap<String, Int>) {
         val series = BarGraphSeries<DataPoint>(
             arrayOf<DataPoint>(
-                DataPoint(2.0, numberSet[2]!!.toDouble()),
-                DataPoint(3.0, numberSet[3]!!.toDouble()),
-                DataPoint(4.0, numberSet[4]!!.toDouble()),
-                DataPoint(5.0, numberSet[5]!!.toDouble()),
-                DataPoint(6.0, numberSet[6]!!.toDouble()),
-                DataPoint(7.0, numberSet[7]!!.toDouble()),
-                DataPoint(8.0, numberSet[8]!!.toDouble()),
-                DataPoint(9.0, numberSet[9]!!.toDouble()),
-                DataPoint(10.0, numberSet[10]!!.toDouble()),
-                DataPoint(11.0, numberSet[11]!!.toDouble()),
-                DataPoint(12.0, numberSet[12]!!.toDouble())
+                DataPoint(2.0, numberSet["2"]!!.toDouble()),
+                DataPoint(3.0, numberSet["3"]!!.toDouble()),
+                DataPoint(4.0, numberSet["4"]!!.toDouble()),
+                DataPoint(5.0, numberSet["5"]!!.toDouble()),
+                DataPoint(6.0, numberSet["6"]!!.toDouble()),
+                DataPoint(7.0, numberSet["7"]!!.toDouble()),
+                DataPoint(8.0, numberSet["8"]!!.toDouble()),
+                DataPoint(9.0, numberSet["9"]!!.toDouble()),
+                DataPoint(10.0, numberSet["10"]!!.toDouble()),
+                DataPoint(11.0, numberSet["11"]!!.toDouble()),
+                DataPoint(12.0, numberSet["12"]!!.toDouble())
             )
         )
         graph.addSeries(series)
